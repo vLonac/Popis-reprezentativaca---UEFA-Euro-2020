@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <title>Vanja Lončarić - XML Programiranje - Projekt</title>
+        <style>
+            .naslov {
+                background: url("background.png");
+                background-size: 80px;
+                color: #ee0000;
+                text-align: center;
+                padding: 20px;
+            }
+            .tekst {
+                color: #ee0000;
+                text-align: center;
+                padding: 5px;
+                background-color: #fff;
+            }
+            th{ 
+                color:#fff;
+            }
+            body{
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            footer {
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: #0cc0e4;
+                color: white;
+                text-align: center;
+                font-weight: bold;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="naslov">
+            <div class="tekst">
+                <h1>Popis reprezentativaca - UEFA Euro 2020</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card card-body">
+                    <input placeholder="Pretraga igrača po imenu" id="search-input" class="form-control" type="text" ></input>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <tr class="bg-info">
+                <th data-column="ime" data-order="desc">Ime &#9650</th>
+                <th data-column="prezime" data-order="desc">Prezime &#9650</th>
+                <th data-column="pozicija" data-order="desc">Pozicija &#9650</th>
+                <th data-column="dob" data-order="desc">Dob &#9650</th>
+                <th data-column="klub" data-order="desc">Klub &#9650</th>
+                <th data-column="liga" data-order="desc">Liga &#9650</th>
+            </tr>
+
+            <tbody id="mojaTablica">
+                
+            </tbody>
+        </table>
+
+        <script>
+            var JSON = 
+                [
+                    {'ime':'Mateo','prezime':'Kovačić','pozicija':'Središnji Vezni','dob':'27','klub':'Chelsea FC','liga':'Premier League'},
+                    {'ime':'Domagoj','prezime':'Bradarić','pozicija':'Lijevi Bek','dob':'21','klub':'Lille O.S.C','liga':'Ligue 1 Uber Eats'},
+                    {'ime':'Domagoj','prezime':'Livaković','pozicija':'Vratar','dob':'26','klub':'GNK Dinamo Zagreb','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Joško','prezime':'Gvardiol','pozicija':'Lijevi Bek / Stoper','dob':'19','klub':'RB Leipzig','liga':'Bundesliga'},
+                    {'ime':'Luka','prezime':'Modrić','pozicija':'Središnji Vezni','dob':'35','klub':'Real Madrid C.F.','liga':'La Liga Santander'},
+                    {'ime':'Nikola','prezime':'Vlašić','pozicija':'Ofenzivni Vezni','dob':'23','klub':'PFK CSKA Moskva','liga':'Russian Premier League'},
+                    {'ime':'Mario','prezime':'Pašalić','pozicija':'Krlini / Središnji Vezni','dob':'26','klub':'Atalanta BC','liga':'Serie A TIM'},
+                    {'ime':'Simon','prezime':'Sluga','pozicija':'Vratar','dob':'28','klub':'Luton Town F.C.','liga':'EFL Championship'},
+                    {'ime':'Dejan','prezime':'Lovren','pozicija':'Stoper','dob':'31','klub':'FK Zenit Sankt Peterburg','liga':'Russian Premier League'},
+                    {'ime':'Šime','prezime':'Vrsaljko','pozicija':'Desni Bek','dob':'29','klub':'Club Atlético de Madrid','liga':'La Liga Santander'},
+                    {'ime':'Andrej','prezime':'Kramarić','pozicija':'Lažna devetka','dob':'29','klub':'TSG 1899 Hoffenheim','liga':'Bundesliga'},
+                    {'ime':'Marcelo','prezime':'Brozović','pozicija':'Zadnji / Središnji Vezni','dob':'28','klub':'Football Club Internazionale Milano','liga':'Serie A TIM'},
+                    {'ime':'Lovro','prezime':'Majer','pozicija':'Ofenzivni Vezni','dob':'23','klub':'GNK Dinamo Zagreb','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Bruno','prezime':'Petković','pozicija':'Središnji Napadač','dob':'26','klub':'GNK Dinamo Zagreb','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Ante','prezime':'Budimir','pozicija':'Središnji Napadač','dob':'29','klub':'Club Atlético Osasuna','liga':'La Liga Santander'},
+                    {'ime':'Duje','prezime':'Ćaleta-Car','pozicija':'Stoper','dob':'24','klub':'Olympique de Marseille','liga':'Ligue 1 Uber Eats'},
+                    {'ime':'Mile','prezime':'Škorić','pozicija':'Stoper','dob':'29','klub':'NK Osijek','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Borna','prezime':'Barišić','pozicija':'Lijevi Bek','dob':'28','klub':'Rangers F.C.','liga':'Scottish Premiership'},
+                    {'ime':'Domagoj','prezime':'Vida','pozicija':'Stoper','dob':'32','klub':'Beşiktaş Jimnastik Kulübü','liga':'Süper Lig'},
+                    {'ime':'Lovre','prezime':'Kalinić','pozicija':'Vratar','dob':'31','klub':'HNK Hajduk Split','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Josip','prezime':'Brekalo','pozicija':'Krlini Napadač','dob':'22','klub':'VfL Wolfsburg-Fußball GmbH','liga':'Bundesliga'},
+                    {'ime':'Ante','prezime':'Rebić','pozicija':'Krlini / Središnji Napadač','dob':'27','klub':'Associazione Calcio Milan','liga':'Serie A TIM'},
+                    {'ime':'Ivan','prezime':'Perišić','pozicija':'Krlini Napadač / Vezni','dob':'32','klub':'Football Club Internazionale Milano','liga':'Serie A TIM'},
+                    {'ime':'Mislav','prezime':'Oršić','pozicija':'Krlini Napadač','dob':'28','klub':'GNK Dinamo Zagreb','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Milan','prezime':'Badelj','pozicija':'Zadnji Vezni','dob':'32','klub':'Genoa Cricket and Football Club S.p.A.','liga':'Serie A TIM'},
+                    {'ime':'Luka','prezime':'Ivanušec','pozicija':'Krlini / Središnji Vezni','dob':'22','klub':'GNK Dinamo Zagreb','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Marko','prezime':'Livaja','pozicija':'Središnji Napadač','dob':'27','klub':'HNK Hajduk Split','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Nikola','prezime':'Moro','pozicija':'Zadnji Vezni','dob':'23','klub':'FC Dinamo Moskva','liga':'Russian Premier League'},
+                    {'ime':'Kristijan','prezime':'Lovrić','pozicija':'Krlini Napadač','dob':'25','klub':'HNK Gorica','liga':'Hrvatski Telekom Prva liga'},
+                    {'ime':'Toma','prezime':'Bašić','pozicija':'Središnji Vezni','dob':'24','klub':'FC Girondins de Bordeaux','liga':'Ligue 1 Uber Eats'},
+                    {'ime':'Marin','prezime':'Pongračić','pozicija':'Stoper','dob':'23','klub':'VfL Wolfsburg-Fußball GmbH','liga':'Bundesliga'}
+                ]
+            
+            $('#search-input').on('keyup', function(){
+                var value = $(this).val()
+                var rezultati = pretražiTablicu(value, JSON)
+                popuniTablicu(rezultati)
+            })
+            
+            $('th').on('click',function(){
+                var column = $(this).data('column')
+                var order = $(this).data('order')
+                var text = $(this).html()
+                text = text.substring(0, text.length - 1)
+
+
+                if(order == 'desc') {
+                    $(this).data('order', "asc")
+                    JSON = JSON.sort((a,b) => a[column] > b[column] ? 1 : -1)
+                    text += "&#9660"
+                }
+
+                else {
+                    $(this).data('order', "desc")
+                    JSON = JSON.sort((a,b) => a[column] < b[column] ? 1 : -1)
+                    text += "&#9650"
+                }
+                $(this).html(text)
+                popuniTablicu(JSON)
+            })
+            
+            popuniTablicu(JSON)
+
+            function pretražiTablicu(value, data){
+                var fileteredData = []
+                for (var i = 0; i < data.length; i++) {
+                    value = value.toLowerCase()
+                    var name = data[i].ime.toLowerCase();
+
+                    if (name.includes(value)) {
+                        fileteredData.push(data[i])
+                    }
+                }
+                return fileteredData
+            }
+
+            function popuniTablicu(podatci){
+                var tablica = document.getElementById('mojaTablica')
+
+                tablica.innerHTML = ''
+
+                for (var i = 0; i < podatci.length; i++){
+                    var redak = `<tr>
+                                    <td>${podatci[i].ime}</td>
+                                    <td>${podatci[i].prezime}</td>
+                                    <td>${podatci[i].pozicija}</td>
+                                    <td>${podatci[i].dob}</td>
+                                    <td>${podatci[i].klub}</td>
+                                    <td>${podatci[i].liga}</td>
+                            </tr>`
+                    tablica.innerHTML += redak
+                }
+            }
+
+        </script>
+    </body>
+    <footer>
+        <a href="https://www.tvz.hr"> <img src="tvz.png" alt="" width="275px"></a>
+        <br>
+        <br>
+        <p>©Vanja Lončarić | Elektroničko poslovanje | XML Programiranje</p>
+    </footer>
+</html>
